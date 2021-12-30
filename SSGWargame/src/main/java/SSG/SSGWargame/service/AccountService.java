@@ -1,6 +1,7 @@
 package SSG.SSGWargame.service;
 
 import SSG.SSGWargame.domain.Account.Account;
+import SSG.SSGWargame.domain.Account.Links;
 import SSG.SSGWargame.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,18 +75,50 @@ public class AccountService {
 //    }
     public void update(Long id, AccountValue value) {
         Account account = accountRepository.findOne(id).orElseThrow(EntityNotFoundException::new);
-        if (!StringUtils.isEmpty(value.getIntroduce()))
-            account.setIntroduce(value.getIntroduce());
-        if (!StringUtils.isEmpty(value.getDomainFields()))
-            account.setDomainFields(value.getDomainFields());
-        if (value.getLinks() != null)
-            account.setLinks(value.getLinks());
-        if (!StringUtils.isEmpty(value.getNickname()))
-            account.setNickname(value.getNickname());
         if (!StringUtils.isEmpty(value.getId()))
             account.setId(value.getId());
         if (!StringUtils.isEmpty(value.getPw()))
             account.setPw(value.getPw());
+        if (!StringUtils.isEmpty(value.getIntroduce()))
+            account.setIntroduce(value.getIntroduce());
+        if (!StringUtils.isEmpty(value.getNickname()))
+            account.setNickname(value.getNickname());
+        if (value.getLink_github() != null){
+            account.setLinks(
+                    new Links(
+                            value.getLink_github(),
+                            account.getLinks().getLinkSns(),
+                            account.getLinks().getLinkMail()
+                    )
+            );
+        }
+        if(value.getLink_sns() != null){
+            account.setLinks(
+                    new Links(
+                            account.getLinks().getLintGithub(),
+                            value.getLink_sns(),
+                            account.getLinks().getLinkMail()
+                    )
+            );
+        }
+        if(value.getLink_mail()!=null){
+            account.setLinks(
+                    new Links(
+                            account.getLinks().getLintGithub(),
+                            account.getLinks().getLinkSns(),
+                            value.getLink_mail()
+                    )
+            );
+        }
+
+        if (!StringUtils.isEmpty(value.getProfileImgLink()))
+            account.setProfileImgLink(value.getProfileImgLink());
+
+        if (!StringUtils.isEmpty(value.getDomainFields()))
+            account.setDomainFields(value.getDomainFields());
+
+        if(value.getScore() != null)
+            account.setScore(value.getScore());
         // 이 코드가 맞는지 모르겠다. 그리고 controller와 어떻게 연결될지도 모르겠다.
         // 우선 이렇게 짜두고, Controller작성 후에 다시 해결하자
     }

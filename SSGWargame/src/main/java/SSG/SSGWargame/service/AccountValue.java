@@ -9,7 +9,7 @@ import javax.persistence.Embedded;
 
 @Getter
 @Setter
-public class AccountValue {
+public class AccountValue { //이런게 DTO인가?
     private String id;
 
     private String pw;
@@ -18,8 +18,9 @@ public class AccountValue {
 
     private String nickname;
 
-    @Embedded
-    private Links links;
+    private String link_github;
+    private String link_sns;
+    private String link_mail;
 
     private String ProfileImgLink;
 
@@ -35,6 +36,10 @@ public class AccountValue {
      */
     private String domainFields;
 
-    @Embedded
-    private Score score;
+    private Integer pwnable;
+    private Integer webhacking;
+    private Integer reversing;
+    private Integer misc;
+    private Integer etc;
+    private Integer total;
 }
