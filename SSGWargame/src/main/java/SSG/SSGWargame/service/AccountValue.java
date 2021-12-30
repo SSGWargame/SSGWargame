@@ -22,7 +22,7 @@ public class AccountValue { //이런게 DTO인가?
     private String link_sns;
     private String link_mail;
 
-    private String ProfileImgLink;
+    private String profileImgLink;
 
 
     /** domainFields

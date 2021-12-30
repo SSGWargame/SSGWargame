@@ -30,7 +30,7 @@ public class AccountController {
         return accountService.getAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{accountId}")
     public Account readAccount(@PathVariable String accountId) {
         return accountService.getOne(accountId).orElseThrow(IllegalStateException::new);
     }
@@ -58,13 +58,13 @@ public class AccountController {
     }
 
 
-    @PutMapping("/{userId}")
+    @PutMapping("/{accountId}")
     public void modifyAccount(@PathVariable String accountId, @RequestBody AccountValue value) {
         Account target = accountService.getOne(accountId).orElseThrow(IllegalAccessError::new);
         accountService.update(target.getIdx(), value);
     }
 
-    @DeleteMapping("/{userId}")
+    @DeleteMapping("/{accountId}")
     public void deleteAccount(@PathVariable String accountId){
         Account target = accountService.getOne(accountId).orElseThrow(IllegalAccessError::new);
         accountService.delete(target.getIdx());
