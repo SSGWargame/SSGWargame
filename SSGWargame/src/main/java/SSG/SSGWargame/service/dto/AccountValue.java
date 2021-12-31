@@ -1,4 +1,4 @@
-package SSG.SSGWargame.service;
+package SSG.SSGWargame.service.dto;
 
 import SSG.SSGWargame.domain.Account.Links;
 import SSG.SSGWargame.domain.Account.Score;

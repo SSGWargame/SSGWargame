@@ -1,6 +1,5 @@
 package SSG.SSGWargame.repository;
 
-import SSG.SSGWargame.domain.Account.Account;
 import SSG.SSGWargame.domain.Notice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

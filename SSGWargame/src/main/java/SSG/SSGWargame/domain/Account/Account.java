@@ -13,7 +13,7 @@ import javax.persistence.*;
 @EqualsAndHashCode// equals와 hashcode메소드를 오버라이드하여 각각 논리적 동등함, 물리적 동등함을 확인할 수 있게 함.
 public class Account {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_id")
     private Long idx;
 

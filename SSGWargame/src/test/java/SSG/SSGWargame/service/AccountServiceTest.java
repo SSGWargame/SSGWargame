@@ -3,6 +3,7 @@ package SSG.SSGWargame.service;
 import SSG.SSGWargame.domain.Account.Account;
 import SSG.SSGWargame.domain.Account.Links;
 import SSG.SSGWargame.repository.AccountRepository;
+import SSG.SSGWargame.service.dto.AccountValue;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -161,7 +162,7 @@ class AccountServiceTest {
 
     }
 
-    private Account makeAccount(String id, String pw, String introduce, String nickname, String githubLink, String SnsLink, String mailLink, String profileImgLink) {
+    public Account makeAccount(String id, String pw, String introduce, String nickname, String githubLink, String SnsLink, String mailLink, String profileImgLink) {
         Account account = new Account();
         account.setId(id);
         account.setPw(pw);
