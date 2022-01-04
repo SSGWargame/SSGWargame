@@ -1,6 +1,8 @@
 package SSG.SSGWargame.service;
 
 import SSG.SSGWargame.domain.Account.Account;
+import SSG.SSGWargame.domain.Account.Links;
+import SSG.SSGWargame.domain.Account.Score;
 import SSG.SSGWargame.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,33 +63,38 @@ public class AccountService {
     //update /account/{id} : put
     //transaction기준으로 entity의 내용이 변경되면 transaction commit시에 dirty checking으로 자동 수정된다.
     //save, update등의 메소드(update는 애초에 존재x)를 사용하지 않아도 된다.
-//    public void update(Long id, AccountValue value) {
-//        Account account = accountRepository.findOne(id).orElseThrow(EntityNotFoundException::new);
-//        account.setIntroduce(value.getIntroduce());
-//        account.setDomainFields(value.getDomainFields());
-//        account.setLinks(value.getLinks());
-//        account.setNickname(value.getNickname());
-//        account.setId(value.getId());
-//        account.setPw(value.getPw());
-//        // 이 코드가 맞는지 모르겠다. 그리고 controller와 어떻게 연결될지도 모르겠다.
-//        // 우선 이렇게 짜두고, Controller작성 후에 다시 해결하자
-//    }
     public void update(Long id, AccountValue value) {
         Account account = accountRepository.findOne(id).orElseThrow(EntityNotFoundException::new);
-        if (!StringUtils.isEmpty(value.getIntroduce()))
-            account.setIntroduce(value.getIntroduce());
-        if (!StringUtils.isEmpty(value.getDomainFields()))
-            account.setDomainFields(value.getDomainFields());
-        if (value.getLinks() != null)
-            account.setLinks(value.getLinks());
-        if (!StringUtils.isEmpty(value.getNickname()))
-            account.setNickname(value.getNickname());
         if (!StringUtils.isEmpty(value.getId()))
             account.setId(value.getId());
+
         if (!StringUtils.isEmpty(value.getPw()))
             account.setPw(value.getPw());
-        // 이 코드가 맞는지 모르겠다. 그리고 controller와 어떻게 연결될지도 모르겠다.
-        // 우선 이렇게 짜두고, Controller작성 후에 다시 해결하자
+
+        if (!StringUtils.isEmpty(value.getIntroduce()))
+            account.setIntroduce(value.getIntroduce());
+
+        if (!StringUtils.isEmpty(value.getNickname()))
+            account.setNickname(value.getNickname());
+
+        String linkGithub = value.getLink_github() != null ? value.getLink_github() : account.getLinks().getLintGithub();
+        String linkSns = value.getLink_sns() != null ? value.getLink_sns() : account.getLinks().getLinkSns();
+        String linkMail = value.getLink_mail() != null ? value.getLink_mail() : account.getLinks().getLinkMail();
+        account.setLinks(new Links(linkGithub, linkSns, linkMail));
+
+
+        if (!StringUtils.isEmpty(value.getProfileImgLink()))
+            account.setProfileImgLink(value.getProfileImgLink());
+
+        if (!StringUtils.isEmpty(value.getDomainFields()))
+            account.setDomainFields(value.getDomainFields());
+
+        Integer pwnable = value.getPwnable() != null ? value.getPwnable() : account.getScore().getPwnable();
+        Integer webhacking = value.getWebhacking() != null ? value.getWebhacking() : account.getScore().getWebhacking();
+        Integer reversing = value.getReversing() != null ? value.getReversing() : account.getScore().getReversing();
+        Integer misc = value.getMisc() != null ? value.getMisc() : account.getScore().getMisc();
+        Integer etc  = value.getEtc() != null ? value.getEtc() : account.getScore().getEtc();
+        account.setScore(new Score(pwnable, webhacking, reversing, misc, etc));
     }
 
     //delete /account/{id} : delete
