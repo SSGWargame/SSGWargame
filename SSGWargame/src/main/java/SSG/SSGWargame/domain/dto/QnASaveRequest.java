@@ -1,4 +1,4 @@
-package SSG.SSGWargame.domain.Request;
+package SSG.SSGWargame.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;

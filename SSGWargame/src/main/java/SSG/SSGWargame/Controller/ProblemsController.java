@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController // json 형태로 결과값 반환 ResponseBody 사용할 필요 없음
 @RequiredArgsConstructor // final 객체 constructor injection 해준다. Autowired 역할
-@RequestMapping("/v1")
+@RequestMapping(value = "/api/v1.0/Problems")
 public class ProblemsController {
     private final ProblemsService problemsService;
 
@@ -16,7 +16,7 @@ public class ProblemsController {
      * 문제조회
      * @return
      */
-    @GetMapping("problems")
+    @GetMapping("/")
     public ResponseEntity findProblmes(@RequestParam(required = false) Long id){
         if(id == null){
             return ResponseEntity.ok(problemsService.findProblems());
@@ -41,13 +41,12 @@ public class ProblemsController {
                 .filename("t1name")
                 .build();
         return problemsRepository.save(problem);
-
     }
      */
     /**
      * 문제등록
      */
-    @PostMapping("problems") // title flag fields description score filelink filename
+    @PostMapping("/") // title flag fields description score filelink filename
     public ResponseEntity<Problems> saveProblems(@RequestBody Problems problems){
         return new ResponseEntity<Problems>(problemsService.saveProblems(problems), HttpStatus.OK);
 
@@ -58,7 +57,7 @@ public class ProblemsController {
      * @param id
      * @return
      */
-    @DeleteMapping("problems")
+    @DeleteMapping("/")
     public ResponseEntity deleteProblems(@RequestParam(required = true) Long id){
         problemsService.deleteProblems(id);
         return ResponseEntity.ok().build();
@@ -70,13 +69,9 @@ public class ProblemsController {
      * @param problems
      * @return
      */
-    @PutMapping("problems")
+    @PutMapping("/")
     public ResponseEntity<Problems> updateProblems(@RequestParam Long id, @RequestBody Problems problems){
         problemsService.updateProblems(id, problems);
         return new ResponseEntity<Problems>(problems, HttpStatus.OK);
     }
-    //-----------------------------------------------
-
-
-    //----------------------------
 }

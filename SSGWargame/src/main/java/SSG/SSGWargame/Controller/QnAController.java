@@ -1,7 +1,7 @@
 package SSG.SSGWargame.Controller;
 
 import SSG.SSGWargame.domain.QnA;
-import SSG.SSGWargame.domain.Request.QnASaveRequest;
+import SSG.SSGWargame.domain.dto.QnASaveRequest;
 import SSG.SSGWargame.service.QnaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController // json 형태로 결과값 반환 ResponseBody 사용할 필요 없음
 @RequiredArgsConstructor // final 객체 constructor injection 해준다. Autowired 역할
-@RequestMapping("/v1")
+@RequestMapping(value = "/api/v1.0/QnA")
 public class QnAController {
     private final QnaService qnaService;
 
@@ -19,7 +19,7 @@ public class QnAController {
      * @param id
      * @return
      */
-    @GetMapping("qna")
+    @GetMapping("/")
     public ResponseEntity findQnA(@RequestParam(required = false) Long id ){
         if(id == null){
             return ResponseEntity.ok(qnaService.findQnA());
@@ -34,7 +34,7 @@ public class QnAController {
      * @param request
      * @return
      */
-    @PostMapping("qna")
+    @PostMapping("/")
     public ResponseEntity<QnA> saveQnA(@RequestBody QnASaveRequest request){
         return new ResponseEntity<QnA>(qnaService.saveQnA(request), HttpStatus.OK);
     }
@@ -44,7 +44,7 @@ public class QnAController {
      * @param id
      * @return
      */
-    @DeleteMapping("qna")
+    @DeleteMapping("/")
     public ResponseEntity deleteQnA(@RequestParam(required = true) Long id){
         qnaService.deleteQnA(id);
         return ResponseEntity.ok().build();
@@ -56,7 +56,7 @@ public class QnAController {
      * @param request
      * @return
      */
-    @PutMapping("qna")
+    @PutMapping("/")
     public ResponseEntity<QnA> updateQnA(@RequestParam Long id, @RequestBody QnASaveRequest request){
         return ResponseEntity.ok(qnaService.updateQnA(id, request));
     }
