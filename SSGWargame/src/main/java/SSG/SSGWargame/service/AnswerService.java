@@ -2,7 +2,7 @@ package SSG.SSGWargame.service;
 
 import SSG.SSGWargame.domain.Answer;
 import SSG.SSGWargame.domain.QnA;
-import SSG.SSGWargame.domain.Request.AnswerRequest;
+import SSG.SSGWargame.domain.dto.AnswerRequest;
 import SSG.SSGWargame.repository.AnswerRepository;
 import SSG.SSGWargame.repository.QnARepository;
 import lombok.RequiredArgsConstructor;
