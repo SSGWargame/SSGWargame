@@ -1,8 +1,10 @@
 package SSG.SSGWargame.service;
 
+import SSG.SSGWargame.domain.Account.Account;
 import SSG.SSGWargame.domain.Answer;
 import SSG.SSGWargame.domain.QnA;
 import SSG.SSGWargame.domain.dto.AnswerRequest;
+import SSG.SSGWargame.repository.AccountRepository;
 import SSG.SSGWargame.repository.AnswerRepository;
 import SSG.SSGWargame.repository.QnARepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import java.util.Optional;
 public class AnswerService {
     private final AnswerRepository answerRepository;
     private final QnARepository qnaRepository;
+    private final AccountRepository accountRepository;
 
     public Answer findAnswer(Long id){ // id로 답변 조회
         Optional<Answer> answer = answerRepository.findById(id);
@@ -63,6 +66,8 @@ public class AnswerService {
         Answer a= optionalAnswer.get();
         Optional<QnA> qna = qnaRepository.findById(request.getQnaid());
         QnA q = qna.get();
+        Optional<Account> account = accountRepository.findOne(request.getAccountIdx());
+        Account account1 = account.get();
         if (!qna.isPresent()) {
             throw new EntityNotFoundException(
                     "qna Not Found");
@@ -72,7 +77,7 @@ public class AnswerService {
         a.setWriteTime(request.getWriteTime());
         a.setUpvote(request.getUpvote());
         a.setQna(q);
-        //q.setAccount(qna.getAccount()); // account 개발 후 추가
+        a.setAccount(account1); // account 개발 후 추가
         return(answerRepository.save(a));
     }
 

@@ -1,5 +1,6 @@
 package SSG.SSGWargame.domain;
 
+import SSG.SSGWargame.domain.Account.Account;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -36,5 +37,9 @@ public class Answer {
     @JoinColumn(name="qnaid")
     private QnA qna;
 
+
+    @ManyToOne
+    @JoinColumn(name="account_id")
+    private Account account;
 
 }
