@@ -1,11 +1,16 @@
 package SSG.SSGWargame.service;
 
+import SSG.SSGWargame.auth.AccountDetail;
 import SSG.SSGWargame.domain.Account.Account;
 import SSG.SSGWargame.domain.Account.Links;
 import SSG.SSGWargame.domain.Account.Score;
 import SSG.SSGWargame.repository.AccountRepository;
 import SSG.SSGWargame.service.dto.AccountValue;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.util.StringUtils;
@@ -16,7 +21,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class AccountService {
+public class AccountService implements UserDetailsService {
     //여기에서의 REST는 기능명세같은 느낌이다. 실제 REST의 처리는 controller에서 한다.
     //controller는 정보를 취합하여 service에 호출하는 역할을 한다.
     @Autowired AccountRepository accountRepository;
@@ -45,6 +50,10 @@ public class AccountService {
     //join /account : post
     public Long join(Account account) {
         validDuplication(account);
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        account.setPw(
+                passwordEncoder.encode(account.getPw())
+        );
         accountRepository.save(account);
         return account.getIdx();
     }
@@ -69,8 +78,12 @@ public class AccountService {
         if (!StringUtils.isEmpty(value.getId()))
             account.setId(value.getId());
 
-        if (!StringUtils.isEmpty(value.getPw()))
-            account.setPw(value.getPw());
+        if (!StringUtils.isEmpty(value.getPw())) {
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            account.setPw(
+                    passwordEncoder.encode(value.getPw())
+            );
+        }
 
         if (!StringUtils.isEmpty(value.getIntroduce()))
             account.setIntroduce(value.getIntroduce());
@@ -103,4 +116,9 @@ public class AccountService {
         accountRepository.deleteByIdx(id);
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
+        Account account = accountRepository.findById(id).orElseThrow(IllegalStateException::new);
+        return new AccountDetail(account);
+    }
 }

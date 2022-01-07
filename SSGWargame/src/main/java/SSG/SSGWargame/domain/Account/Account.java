@@ -44,4 +44,10 @@ public class Account {
 
     @Embedded
     private Score score;
+
+    /** role
+     * USER
+     * ADMIN
+     */
+    private String role;
 }
