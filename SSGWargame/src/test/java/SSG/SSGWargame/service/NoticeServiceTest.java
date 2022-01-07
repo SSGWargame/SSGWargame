@@ -2,6 +2,7 @@ package SSG.SSGWargame.service;
 
 import SSG.SSGWargame.domain.Account.Account;
 import SSG.SSGWargame.domain.Notice;
+import SSG.SSGWargame.service.dto.AccountValue;
 import SSG.SSGWargame.service.dto.NoticeValue;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +27,9 @@ class NoticeServiceTest {
     @Test
     public void 공지작성(){
         //given
-        Account account = accountServiceTest.makeAccount("tony", "tony2022", "I'm tony", "PMDC", "github.com/yj-anthonyjo", "instagram.com", "yj.anthonyjo@gmail.com", "temp");
-        accountService.join(account);
-        NoticeValue value = makeNotice(account.getId(),"Title : Notice Test", "Content : Test1");
+        AccountValue accountValue = accountServiceTest.makeAccount("tony", "tony2022", "I'm tony", "PMDC", "github.com/yj-anthonyjo", "instagram.com", "yj.anthonyjo@gmail.com", "temp");
+        Account account = accountService.join(accountValue);
+        NoticeValue value = makeNotice(accountValue.getUsername(),"Title : Notice Test", "Content : Test1");
 
         //when
         Long savedId = noticeService.add(value).getId();
@@ -43,36 +44,36 @@ class NoticeServiceTest {
     @Test
     public void 공지전체조회(){
         //given
-        Account account1 = accountServiceTest.makeAccount("tony", "tony2022", "I'm tony", "PMDC", "github.com/yj-anthonyjo", "instagram.com", "yj.anthonyjo@gmail.com", "temp");
-        Account account2 = accountServiceTest.makeAccount("anthony", "anthony2022", "I'm tony", "PMDC", "github.com/yj-anthonyjo", "instagram.com", "yj.anthonyjo@gmail.com", "temp");
-        accountService.join(account1);
-        accountService.join(account2);
+        AccountValue accountValue1 = accountServiceTest.makeAccount("tony", "tony2022", "I'm tony", "PMDC", "github.com/yj-anthonyjo", "instagram.com", "yj.anthonyjo@gmail.com", "temp");
+        AccountValue accountValue2 = accountServiceTest.makeAccount("anthony", "anthony2022", "I'm tony", "PMDC", "github.com/yj-anthonyjo", "instagram.com", "yj.anthonyjo@gmail.com", "temp");
+        Account account1 = accountService.join(accountValue1);
+        Account account2 = accountService.join(accountValue2);
 
-        NoticeValue value1 = makeNotice(account1.getId(),"Title : Notice Test1", "Content : Test1");
-        NoticeValue value2 = makeNotice(account1.getId(),"Title : Notice Test2", "Content : Test2");
+        NoticeValue value1 = makeNotice(accountValue1.getUsername(),"Title : Notice Test1", "Content : Test1");
+        NoticeValue value2 = makeNotice(accountValue1.getUsername(),"Title : Notice Test2", "Content : Test2");
 
         //when
-        Long notice1 = noticeService.add(value1).getId();
-        Long notice2 = noticeService.add(value2).getId();
+        Notice notice1 = noticeService.add(value1);
+        Notice notice2 = noticeService.add(value2);
         List<Notice> all = noticeService.getAll();
 
         //then
         System.out.println(all);
 
-//        assertThat(all).contains(notice1);
-//        assertThat(all).contains(notice2);
+        assertThat(all).contains(notice1);
+        assertThat(all).contains(notice2);
     }
 
     @Test
     public void 공지조회(){
         //given
-        Account account1 = accountServiceTest.makeAccount("tony", "tony2022", "I'm tony", "PMDC", "github.com/yj-anthonyjo", "instagram.com", "yj.anthonyjo@gmail.com", "temp");
-        Account account2 = accountServiceTest.makeAccount("anthony", "anthony2022", "I'm tony", "PMDC", "github.com/yj-anthonyjo", "instagram.com", "yj.anthonyjo@gmail.com", "temp");
-        accountService.join(account1);
-        accountService.join(account2);
+        AccountValue accountValue1 = accountServiceTest.makeAccount("tony", "tony2022", "I'm tony", "PMDC", "github.com/yj-anthonyjo", "instagram.com", "yj.anthonyjo@gmail.com", "temp");
+        AccountValue accountValue2 = accountServiceTest.makeAccount("anthony", "anthony2022", "I'm tony", "PMDC", "github.com/yj-anthonyjo", "instagram.com", "yj.anthonyjo@gmail.com", "temp");
+        Account account1 = accountService.join(accountValue1);
+        Account account2 = accountService.join(accountValue2);
 
-        NoticeValue value1 = makeNotice(account1.getId(),"Title : Notice Test1", "Content : Test1");
-        NoticeValue value2 = makeNotice(account2.getId(),"Title : Notice Test2", "Content : Test2");
+        NoticeValue value1 = makeNotice(accountValue1.getUsername(),"Title : Notice Test1", "Content : Test1");
+        NoticeValue value2 = makeNotice(accountValue2.getUsername(),"Title : Notice Test2", "Content : Test2");
 
         //when
         Notice notice1 = noticeService.add(value1);
@@ -93,10 +94,10 @@ class NoticeServiceTest {
     @Test
     public void 공지수정(){
         //given
-        Account account1 = accountServiceTest.makeAccount("tony", "tony2022", "I'm tony", "PMDC", "github.com/yj-anthonyjo", "instagram.com", "yj.anthonyjo@gmail.com", "temp");
-        accountService.join(account1);
+        AccountValue accountValue = accountServiceTest.makeAccount("tony", "tony2022", "I'm tony", "PMDC", "github.com/yj-anthonyjo", "instagram.com", "yj.anthonyjo@gmail.com", "temp");
+        Account account = accountService.join(accountValue);
 
-        NoticeValue value1 = makeNotice(account1.getId(),"Title : Notice Test1", "Content : Test1");
+        NoticeValue value1 = makeNotice(accountValue.getUsername(),"Title : Notice Test1", "Content : Test1");
         Notice notice = noticeService.add(value1);
 
         //when
@@ -110,16 +111,16 @@ class NoticeServiceTest {
         assertThat(target)
                 .returns("Title : Notice Test1", from(Notice::getTitle))
                 .returns("Content : Test1, Updated", from(Notice::getContent))
-                .returns(account1, from(Notice::getAccount));
+                .returns(account, from(Notice::getAccount));
     }
 
     @Test
     public void 공지삭제(){
         //given
-        Account account1 = accountServiceTest.makeAccount("tony", "tony2022", "I'm tony", "PMDC", "github.com/yj-anthonyjo", "instagram.com", "yj.anthonyjo@gmail.com", "temp");
-        accountService.join(account1);
+        AccountValue accountValue = accountServiceTest.makeAccount("tony", "tony2022", "I'm tony", "PMDC", "github.com/yj-anthonyjo", "instagram.com", "yj.anthonyjo@gmail.com", "temp");
+        accountService.join(accountValue);
 
-        NoticeValue value1 = makeNotice(account1.getId(),"Title : Notice Test1", "Content : Test1");
+        NoticeValue value1 = makeNotice(accountValue.getUsername(),"Title : Notice Test1", "Content : Test1");
         Notice notice = noticeService.add(value1);
         Long savedId = notice.getId();
 

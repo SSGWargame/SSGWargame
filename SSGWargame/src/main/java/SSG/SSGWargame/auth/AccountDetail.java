@@ -25,7 +25,7 @@ public class AccountDetail implements UserDetails {
      * @param account : Account Entity.
      */
     public AccountDetail(Account account){
-        this.id = account.getId();
+        this.id = account.getUsername();
         this.password = account.getPw();
         this.auth = "ROLE_" + account.getRole();
     }

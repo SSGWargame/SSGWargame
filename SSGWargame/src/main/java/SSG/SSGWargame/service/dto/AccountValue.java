@@ -1,16 +1,14 @@
 package SSG.SSGWargame.service.dto;
 
-import SSG.SSGWargame.domain.Account.Links;
-import SSG.SSGWargame.domain.Account.Score;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Embedded;
+import java.util.OptionalInt;
 
 @Getter
 @Setter
 public class AccountValue { //이런게 DTO인가?
-    private String id;
+    private String username;
 
     private String pw;
 
@@ -36,10 +34,10 @@ public class AccountValue { //이런게 DTO인가?
      */
     private String domainFields;
 
-    private Integer pwnable;
-    private Integer webhacking;
-    private Integer reversing;
-    private Integer misc;
-    private Integer etc;
-    private Integer total;
+    private OptionalInt pwnable = OptionalInt.empty();
+    private OptionalInt webhacking = OptionalInt.empty();
+    private OptionalInt reversing = OptionalInt.empty();
+    private OptionalInt misc = OptionalInt.empty();
+    private OptionalInt etc = OptionalInt.empty();
+    private OptionalInt total = OptionalInt.empty();
 }

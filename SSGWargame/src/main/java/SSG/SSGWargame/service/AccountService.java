@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.util.StringUtils;
@@ -25,6 +26,7 @@ public class AccountService implements UserDetailsService {
     //여기에서의 REST는 기능명세같은 느낌이다. 실제 REST의 처리는 controller에서 한다.
     //controller는 정보를 취합하여 service에 호출하는 역할을 한다.
     @Autowired AccountRepository accountRepository;
+    @Autowired PasswordEncoder passwordEncoder;
 
 
     //find /account : get
@@ -44,26 +46,53 @@ public class AccountService implements UserDetailsService {
 
     /**
      * 회원가입
-     * @param account
+     * @param value
      * @return 회원 index
      */
-    //join /account : post
-    public Long join(Account account) {
-        validDuplication(account);
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    //join /value : post
+    public Account join(AccountValue value) {
+        //Validate whether there is account which has value.id as it's id
+        validDuplication(value.getUsername());
+
+       //Create Account object
+        Account account = new Account();
+        account.setUsername(value.getUsername());
         account.setPw(
-                passwordEncoder.encode(account.getPw())
+                passwordEncoder.encode(value.getPw())
         );
+        account.setIntroduce(value.getIntroduce());
+        account.setNickname(value.getNickname());
+        account.setLinks(new Links(
+                value.getLink_github(),
+                value.getLink_sns(),
+                value.getLink_mail()
+        ));
+        account.setProfileImgLink(value.getProfileImgLink());
+        account.setDomainFields(value.getDomainFields());
+        account.setScore(
+                new Score(
+                        value.getPwnable().orElse(0),
+                        value.getWebhacking().orElse(0),
+                        value.getReversing().orElse(0),
+                        value.getMisc().orElse(0),
+                        value.getEtc().orElse(0)
+                )
+        );
+        //Spring Security
+        account.setRole("ROLE_USER");
+
+        //persist object
         accountRepository.save(account);
-        return account.getIdx();
+
+        return account;
     }
 
     /**
      * ID(index아님)가 중복되면, RuntimeError발생.
-     * @param account
+     * @param id
      */
-    private void validDuplication(Account account) {
-        Optional<Account> temp = accountRepository.findById(account.getId());
+    private void validDuplication(String id) {
+        Optional<Account> temp = accountRepository.findById(id);
         if(temp.isPresent()){
             throw new IllegalStateException("이미 존재하는 ID입니다.");
         }
@@ -75,8 +104,8 @@ public class AccountService implements UserDetailsService {
     //save, update등의 메소드(update는 애초에 존재x)를 사용하지 않아도 된다.
     public void update(Long id, AccountValue value) {
         Account account = accountRepository.findOne(id).orElseThrow(EntityNotFoundException::new);
-        if (!StringUtils.isEmpty(value.getId()))
-            account.setId(value.getId());
+        if (!StringUtils.isEmpty(value.getUsername()))
+            account.setUsername(value.getUsername());
 
         if (!StringUtils.isEmpty(value.getPw())) {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -103,11 +132,12 @@ public class AccountService implements UserDetailsService {
         if (!StringUtils.isEmpty(value.getDomainFields()))
             account.setDomainFields(value.getDomainFields());
 
-        Integer pwnable = value.getPwnable() != null ? value.getPwnable() : account.getScore().getPwnable();
-        Integer webhacking = value.getWebhacking() != null ? value.getWebhacking() : account.getScore().getWebhacking();
-        Integer reversing = value.getReversing() != null ? value.getReversing() : account.getScore().getReversing();
-        Integer misc = value.getMisc() != null ? value.getMisc() : account.getScore().getMisc();
-        Integer etc  = value.getEtc() != null ? value.getEtc() : account.getScore().getEtc();
+        Integer pwnable = value.getPwnable().orElse(account.getScore().getPwnable());
+        Integer webhacking = value.getWebhacking().orElse(account.getScore().getWebhacking());
+        Integer reversing = value.getReversing().orElse(account.getScore().getReversing());
+        Integer misc = value.getMisc().orElse(account.getScore().getMisc());
+        Integer etc = value.getEtc().orElse(account.getScore().getEtc());
+
         account.setScore(new Score(pwnable, webhacking, reversing, misc, etc));
     }
 
