@@ -11,4 +11,5 @@ public class AnswerRequest {
     private int upvote;
     private LocalDateTime writeTime;
     private Long qnaid;
+    private Long accountIdx;
 }
