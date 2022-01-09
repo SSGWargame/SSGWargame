@@ -17,5 +17,4 @@ public class SolutionValue {
 
     private String content;
 
-    private LocalDateTime time; //시,분,초
 }

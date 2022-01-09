@@ -21,7 +21,6 @@ public class SolutionService {
     @Autowired private SolutionRepository solutionRepository;
     @Autowired private AccountService accountService;
     @Autowired private ProblemsRepository problemRepository;
-    @Autowired private EntityManager em; // problemRepository 들어오면 바꾸고 없애자
 
 
     //등록
@@ -29,7 +28,7 @@ public class SolutionService {
         Solution solution = new Solution();
 
         //Entity find
-        Problems problem = em.find(Problems.class, value.getProblemId());
+        Problems problem = problemRepository.getById(value.getProblemId());
         Account account = accountService.getOne(value.getAccountId())
                 .orElseThrow(IllegalStateException::new);
 
