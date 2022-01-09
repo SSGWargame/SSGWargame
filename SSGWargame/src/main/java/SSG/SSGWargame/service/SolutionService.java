@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.util.StringUtils;
 
-import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class SolutionService {
 
         //Entity find
         Problems problem = problemRepository.getById(value.getProblemId());
-        Account account = accountService.getOne(value.getAccountId())
+        Account account = accountService.getOne(value.getAccountUsername())
                 .orElseThrow(IllegalStateException::new);
 
         solution.setProblems(problem);
