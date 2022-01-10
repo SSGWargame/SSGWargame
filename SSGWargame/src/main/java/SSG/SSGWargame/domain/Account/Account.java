@@ -1,11 +1,15 @@
 package SSG.SSGWargame.domain.Account;
 
+import SSG.SSGWargame.domain.Problems;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.beans.factory.parsing.Problem;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -30,6 +34,9 @@ public class Account {
 
     private String ProfileImgLink;
 
+    @ManyToMany(mappedBy = "solvedAccount ")
+    private List<Problems> solvedProblems = new ArrayList<>();
+
 
     /** domainFields
      * Fields
@@ -50,4 +57,16 @@ public class Account {
      * ADMIN
      */
     private String role;
+
+    //연관관계 메소드
+    public void addSolvedProblems(Problems problem){
+        if (!this.solvedProblems.contains(problem)) {
+            this.solvedProblems.add(problem);
+        }
+
+        if (!problem.getSolvedAccount().contains(this)) {
+            problem.getSolvedAccount().add(this);
+        }
+
+    }
 }

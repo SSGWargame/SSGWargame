@@ -4,6 +4,8 @@ import SSG.SSGWargame.domain.Account.Account;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -19,9 +21,7 @@ public class Problems {
 
     public String title; // public 사용해서 다른곳에서 접근
 
-   // @Column(columnDefinition = "varchar(120)")
-   // private String title; // private
-
+   // @Column(columnDefinition = "varchar(120)") // private String title; // private
     @Column(columnDefinition = "varchar(255)")
     private String flag;
 
@@ -46,18 +46,37 @@ public class Problems {
     //2022.1.13 test 위해 account restapi 개발 전까지는 주석처리해둠
     @ManyToOne // ProblemMakerIndex
     @JoinColumn(name="account_id")
-    private Account account;
+    private Account maker;
+
+    @ManyToMany
+    @JoinTable(
+            name = "ACCOUNT_SOLVED_PROBLEM",
+            joinColumns = @JoinColumn(name = "PROBLEMS_ID"),
+            inverseJoinColumns = @JoinColumn(name = "ACCOUNT_ID")
+    )
+    private List<Account> solvedAccount = new ArrayList<Account>();
 
 
-    public Problems(String title, String flag, int fields, String description, int score, String filelink, String filename){
-        this.title=title;
-        this.flag=flag;
-        this.fields=fields;
-        this.description=description;
-        this.score=score;
-        this.filelink=filelink;
-        this.filename=filename;
+    public Problems(String title, String flag, int fields, String description, int score, String filelink, String filename) {
 
+        this.title = title;
+        this.flag = flag;
+        this.fields = fields;
+        this.description = description;
+        this.score = score;
+        this.filelink = filelink;
+        this.filename = filename;
+
+    }
+
+    //연관관계 메소드
+    public void addSolvedAccount(Account account){
+        if (!this.solvedAccount.contains(account)) {
+            this.solvedAccount.add(account);
+        }
+        if (!account.getSolvedProblems().contains(this)) {
+            account.getSolvedProblems().add(this);
+        }
     }
 
 }
