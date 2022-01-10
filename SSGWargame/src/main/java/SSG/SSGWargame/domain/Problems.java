@@ -1,5 +1,6 @@
 package SSG.SSGWargame.domain;
 
+import SSG.SSGWargame.domain.Account.Account;
 import lombok.*;
 
 import javax.persistence.*;
@@ -42,11 +43,11 @@ public class Problems {
     @Column(columnDefinition = "varchar(200)")
     private String filename;
 
-    /* 2022.1.13 test 위해 account restapi 개발 전까지는 주석처리해둠
+    //2022.1.13 test 위해 account restapi 개발 전까지는 주석처리해둠
     @ManyToOne // ProblemMakerIndex
     @JoinColumn(name="account_id")
     private Account account;
-     */
+
 
     public Problems(String title, String flag, int fields, String description, int score, String filelink, String filename){
         this.title=title;

@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @Setter
 public class QnA {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "qna_id")
     private Long id;
 
     @Column(columnDefinition = "varchar(120)")
@@ -38,7 +39,7 @@ public class QnA {
     //private Long targetProblem;
 
     @ManyToOne
-    @JoinColumn(name="Problems_id")
+    @JoinColumn(name="problems_id")
     private Problems problems;
 
     /* 나중에 account 만들어 진 후에 추가
