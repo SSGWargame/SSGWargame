@@ -27,7 +27,7 @@ public class AccountRepository {
     }
 
     public Optional<Account> findById(String Id) { // account/get?id={id}
-        return em.createQuery("select a from Account a where a.id = :Id", Account.class)
+        return em.createQuery("select a from Account a where a.username = :Id", Account.class)
                 .setParameter("Id", Id)
                 .getResultList()
                 .stream().findAny();

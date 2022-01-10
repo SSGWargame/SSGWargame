@@ -15,9 +15,9 @@ public class Account {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_id")
-    private Long idx;
+    private Long id;
 
-    private String id;
+    private String username;
 
     private String pw;
 
@@ -44,4 +44,10 @@ public class Account {
 
     @Embedded
     private Score score;
+
+    /** role
+     * USER
+     * ADMIN
+     */
+    private String role;
 }

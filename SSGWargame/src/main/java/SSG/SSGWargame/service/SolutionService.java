@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.util.StringUtils;
 
-import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,7 +20,6 @@ public class SolutionService {
     @Autowired private SolutionRepository solutionRepository;
     @Autowired private AccountService accountService;
     @Autowired private ProblemsRepository problemRepository;
-    @Autowired private EntityManager em; // problemRepository 들어오면 바꾸고 없애자
 
 
     //등록
@@ -29,8 +27,8 @@ public class SolutionService {
         Solution solution = new Solution();
 
         //Entity find
-        Problems problem = em.find(Problems.class, value.getProblemId());
-        Account account = accountService.getOne(value.getAccountId())
+        Problems problem = problemRepository.getById(value.getProblemId());
+        Account account = accountService.getOne(value.getAccountUsername())
                 .orElseThrow(IllegalStateException::new);
 
         solution.setProblems(problem);

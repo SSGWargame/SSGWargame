@@ -38,7 +38,7 @@ public class SolutionRepository {
         Root<Solution> m = cq.from(Solution.class);
 
         //검색조건
-        Predicate problemEqual = cb.equal(m.get("id"), problemId);
+        Predicate problemEqual = cb.equal(m.<Integer>get("problems"), problemId);// column명 아니고, entity의 attribute명이다.
 
         //정렬
         Order idDesc = cb.desc(m.get("id"));

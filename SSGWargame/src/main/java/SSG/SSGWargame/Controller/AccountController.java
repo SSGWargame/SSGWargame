@@ -1,8 +1,6 @@
 package SSG.SSGWargame.Controller;
 
 import SSG.SSGWargame.domain.Account.Account;
-import SSG.SSGWargame.domain.Account.Links;
-import SSG.SSGWargame.domain.Account.Score;
 import SSG.SSGWargame.service.AccountService;
 import SSG.SSGWargame.service.dto.AccountValue;
 import lombok.RequiredArgsConstructor;
@@ -34,38 +32,21 @@ public class AccountController {
     }
 
     @PostMapping("/")
-    public Long joinAccount(@RequestBody AccountValue value) {
-        Account account = new Account();
-        account.setId(value.getId());
-        account.setPw(value.getPw());
-        account.setIntroduce(value.getIntroduce());
-        account.setNickname(value.getNickname());
-
-        Links links = new Links(value.getLink_github(), value.getLink_sns(), value.getLink_mail());
-        account.setLinks(links);
-
-        account.setProfileImgLink(value.getProfileImgLink());
-
-        account.setDomainFields(value.getDomainFields());
-
-        Score score = new Score(value.getPwnable(), value.getWebhacking(),
-                value.getReversing(), value.getMisc(), value.getEtc());
-        account.setScore(score);
-
-        return accountService.join(account);
+    public Account joinAccount(@RequestBody AccountValue value) {
+        return accountService.join(value);
     }
 
 
     @PutMapping("/{accountId}")
     public void modifyAccount(@PathVariable String accountId, @RequestBody AccountValue value) {
         Account target = accountService.getOne(accountId).orElseThrow(IllegalAccessError::new);
-        accountService.update(target.getIdx(), value);
+        accountService.update(target.getId(), value);
     }
 
     @DeleteMapping("/{accountId}")
     public void deleteAccount(@PathVariable String accountId){
         Account target = accountService.getOne(accountId).orElseThrow(IllegalAccessError::new);
-        accountService.delete(target.getIdx());
+        accountService.delete(target.getId());
     }
 
 
