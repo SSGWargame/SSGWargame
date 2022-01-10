@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/v1.0/Solution")
 public class SolutionController {
