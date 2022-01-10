@@ -22,3 +22,6 @@ logging:
     #show-sql : Output sql using system.out.println
     #logging.level.org.hibernate.SQL : Output using log. This is better than show-sql.
   org.hibernate.type: trace
+
+server:
+  port : 9099

@@ -1,5 +1,6 @@
 package SSG.SSGWargame.service;
 
+import SSG.SSGWargame.domain.Answer;
 import SSG.SSGWargame.domain.Problems;
 import SSG.SSGWargame.domain.QnA;
 import SSG.SSGWargame.domain.dto.QnASaveRequest;
@@ -27,6 +28,13 @@ public class QnaService {
         }
         throw new EntityNotFoundException(
                 "Cant find any QnA under given ID");
+    }
+
+    // problems id로 해당 문제 qna 리스트 조회
+    public List<QnA> findQnaByProblemsId(Long Problems_Id){ // id로 답변 조회
+        Optional<Problems> problems= problemsRepository.findById(Problems_Id);
+        Problems p = problems.get();
+        return(qnaRepository.findByProblems(p));
     }
 
     public List<QnA> findQnA(){ // 전체 질문 조회

@@ -34,7 +34,7 @@ public class Answer {
     private LocalDateTime writeTime;
 
     @ManyToOne
-    @JoinColumn(name="qnaid")
+    @JoinColumn(name="qna_id")
     private QnA qna;
 
 

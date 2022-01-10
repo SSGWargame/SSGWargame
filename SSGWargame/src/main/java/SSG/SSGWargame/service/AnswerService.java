@@ -31,7 +31,7 @@ public class AnswerService {
                 "Cant find any answer under given ID");
     }
 
-    //QnA_Id로 답변 조회해서 해당 질문글 답변 모두 조회 아마도?
+    //QnA_Id로 답변 조회해서 해당 질문글 답변 모두 조회
     public List<Answer> findAnswerByQnAId(Long QnA_Id){ // id로 답변 조회
         Optional<QnA> qna= qnaRepository.findById(QnA_Id);
         QnA q = qna.get();
