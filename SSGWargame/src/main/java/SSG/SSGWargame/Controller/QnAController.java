@@ -9,8 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
-@RestController // json 형태로 결과값 반환 ResponseBody 사용할 필요 없음
-@RequiredArgsConstructor // final 객체 constructor injection 해준다. Autowired 역할
+@RestController
+@RequiredArgsConstructor
 @RequestMapping(value = "/api/v1.0/QnA")
 public class QnAController {
     private final QnaService qnaService;
