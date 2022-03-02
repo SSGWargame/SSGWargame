@@ -1,12 +1,13 @@
 package SSG.SSGWargame.Controller;
 import SSG.SSGWargame.domain.Problems;
+import SSG.SSGWargame.domain.dto.Flag;
 import SSG.SSGWargame.service.ProblemsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin
+@CrossOrigin // CORS error 해결, 모든 도메인, 모든 요청방식에 대해 허용, 메소드에다 붙이면 해당 메소드만 허용
 @RestController // json 형태로 결과값 반환 ResponseBody 사용할 필요 없음
 @RequiredArgsConstructor // final 객체 constructor injection 해준다. Autowired 역할
 @RequestMapping(value = "/api/v1.0/Problems")
@@ -74,5 +75,11 @@ public class ProblemsController {
     public ResponseEntity<Problems> updateProblems(@RequestParam Long id, @RequestBody Problems problems){
         problemsService.updateProblems(id, problems);
         return new ResponseEntity<Problems>(problems, HttpStatus.OK);
+    }
+
+    @PostMapping("/{id}/flag")
+    public ResponseEntity flagAuth(@PathVariable("id") Long id, @RequestBody Flag flag){
+        int result = problemsService.flagAuth(id, flag.getFlag());
+        return ResponseEntity.ok(result);
     }
 }

@@ -52,4 +52,17 @@ public class ProblemsService {
 
         problemsRepository.save(p);
     }
+
+    public int flagAuth(Long id, String userFlag){
+        Problems problems = findProblems(id);
+        String correctFlag;
+        correctFlag= problems.getFlag(); // db에 저장되어 있는 flag
+
+        if(correctFlag.equals(userFlag)){ // dbflag와 입력받은 flag 비교후 동일하면 1 반환
+            return 1;
+        }
+        else{
+            return 0;
+        }
+    }
 }
